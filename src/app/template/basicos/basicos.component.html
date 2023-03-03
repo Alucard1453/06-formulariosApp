@@ -1,0 +1,95 @@
+<h2>Template: Básicos</h2>
+<div class="row">
+    <div class="col">
+        <!-- con la referencia local #miFormulario="ngForm" especifica que la referencia local es de 
+        tipo ngForm, asi enlaza la referencia de ngForm a la referencia local-->
+        <form (ngSubmit)="guardar()" #miFormulario="ngForm" autocomplete="off">
+            <!-- Campo Producto -->
+            <div class="mb-3 row">
+                <label for="" class="form-label col-sm-3">Producto</label>
+                <div class="col-sm-9">
+                    <!-- Es necesario la propiedad name y la propiedad ngModel para que sea posible 
+                    recuperar el valor del input del lado de ts -->
+                    <input type="text"
+                           class="form-control" 
+                           placeholder="Nombre del producto"
+                           minlength="3"
+                           name="producto"
+                           ngModel
+                           required>
+                    <!-- Se recupera el valor del formulario mediante la propiedad controls (asi viene 
+                        estructurado) y el nombre del indice. -->
+                    <!-- Modo solo HTML -->
+                    <!-- <span class="form-text text-danger"
+                          *ngIf="this.miFormulario.form.controls['producto']?.invalid 
+                              && this.miFormulario.form.controls['producto']?.touched">Debe ser de 3 letras</span> -->
+                    <!-- Modo con TS -->
+                    <span class="form-text text-danger"
+                          *ngIf="nombreValido()">Debe ser de 3 letras</span>
+                </div>
+            </div>
+            <!-- Campo Precio -->
+            <div class="mb-3 row">
+                <label for="" class="form-label col-sm-3">Precio</label>
+                <div class="col-sm-9">
+                    <input type="number"
+                           class="form-control" 
+                           placeholder="Precio del producto"
+                           name="precio"
+                           [ngModel]="initForm.precio"
+                           required
+                           min="0">
+                    <span class="form-text text-danger"
+                          *ngIf="precioValido()">El precio debe ser igual o mayor a 0.</span>
+                </div>
+            </div>
+            <!-- Campo Existencias -->
+            <!-- Como ejemplo se hace uso de directiva personalizada custonMin en lugar de porpiedad min 
+            para poder utilizarla en su declaracion es necesario indicar selector: '[custonMin][ngModel]'-->
+            <div class="mb-3 row">
+                <label for="" class="form-label col-sm-3">Existencias</label>
+                <div class="col-sm-9">
+                    <input type="number"
+                           class="form-control" 
+                           placeholder="Existencias del producto"
+                           name="existencias"
+                           [ngModel]="initForm.existencias"
+                           required
+                           custonMin
+                           [minimo]="0">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <!-- Para evitar el submit clasico que refresca el navegador web se debe importar en 
+                    el modulo el FormsModule, de esta forma ya no hace el refresh.
+                    La pripiedad disabled permite deshabilitar el boton mientras el formulario sea invalido -->
+                    <button type="submit"
+                            [disabled]="miFormulario.invalid"
+                            class="btn btn-primary float-end">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <span>Valid</span>
+        <pre> {{ miFormulario.valid }} </pre>
+
+        <!-- Pristine significa que el formulario no ha sufrido cambios desde que se presento al usuario -->
+        <span>Pristine</span>
+        <pre> {{ miFormulario.pristine }} </pre>
+
+        <!-- Touched significa que el formulario ya fue modificaco o tocado por el usuario -->
+        <span>Touched</span>
+        <pre> {{ miFormulario.touched }} </pre>
+
+        <span>Value</span>
+        <pre>{{ miFormulario.value | json }}</pre>
+
+        <span>CustomDirective</span>
+        <pre>{{ miFormulario.form.controls['existencias']?.errors | json }}</pre>
+    </div>
+</div>
